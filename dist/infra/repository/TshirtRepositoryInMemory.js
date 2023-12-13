@@ -1,4 +1,4 @@
-import { Repository } from "../base/TshirtRepository.js";
+import { Repository } from "./base/TshirtRepository.js";
 export class TshirtRepositoryInMemory extends Repository {
     constructor(database) {
         super();

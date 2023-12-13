@@ -1,4 +1,4 @@
-import { Tshirt } from "../../core/entity/Tshirt.js";
+import { Tshirt } from "../../../core/entity/Tshirt.js";
 
 export abstract class Repository {
     abstract findById(id:number):Promise<Tshirt>;

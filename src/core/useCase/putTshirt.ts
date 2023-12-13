@@ -1,4 +1,4 @@
-import { Repository } from "../../infra/base/TshirtRepository.js";
+import { Repository } from "../../infra/repository/base/TshirtRepository.js";
 import { Tshirt } from "../entity/Tshirt.js";
 
 

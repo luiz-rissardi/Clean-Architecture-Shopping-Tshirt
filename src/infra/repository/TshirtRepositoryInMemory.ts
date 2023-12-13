@@ -1,5 +1,5 @@
 import { Tshirt } from "../../core/entity/Tshirt.js";
-import { Repository } from "../base/TshirtRepository.js";
+import { Repository } from "./base/TshirtRepository.js";
 
 export class TshirtRepositoryInMemory extends Repository {
 

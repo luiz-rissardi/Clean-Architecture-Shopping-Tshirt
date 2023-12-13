@@ -1,8 +1,8 @@
-import { Repository } from "../../infra/base/TshirtRepository";
-import { Tshirt } from "../entity/Tshirt";
+import { Repository } from "../../infra/repository/base/TshirtRepository.js";
+import { Tshirt } from "../entity/Tshirt.js";
 
 
-export class getAllTshirts{
+export class GetAllTshirts{
     constructor(private repository:Repository) {
     }
 
