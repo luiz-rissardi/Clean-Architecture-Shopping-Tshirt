@@ -10,8 +10,7 @@ import { TshirtRepositoryInMemory } from "../repository/TshirtRepositoryInMemory
 
 export class FactoryTshirtController{
     static createInstance(){
-        const database = new Map<number,Tshirt>();
-        const repository = new TshirtRepositoryInMemory(database);
+        const repository = new TshirtRepositoryInMemory(new Map());
 
         const useCases =  {
             createTshirt:new CreateTshirt(repository),

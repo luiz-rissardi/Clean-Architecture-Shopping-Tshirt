@@ -3,7 +3,12 @@ export class GetTshirt {
         this.tshirtRepository = tshirtRepository;
     }
     async execute(tshirtId) {
-        const tshirt = await this.tshirtRepository.findById(tshirtId);
-        return tshirt.active ? tshirt : undefined;
+        try {
+            const tshirt = await this.tshirtRepository.findById(tshirtId);
+            return tshirt;
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
     }
 }

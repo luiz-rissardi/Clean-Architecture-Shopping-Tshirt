@@ -8,8 +8,7 @@ import { SellTshirt } from "../../core/useCase/sellTshirts.js";
 import { TshirtRepositoryInMemory } from "../repository/TshirtRepositoryInMemory.js";
 export class FactoryTshirtController {
     static createInstance() {
-        const database = new Map();
-        const repository = new TshirtRepositoryInMemory(database);
+        const repository = new TshirtRepositoryInMemory(new Map());
         const useCases = {
             createTshirt: new CreateTshirt(repository),
             getAllTshirt: new GetAllTshirts(repository),

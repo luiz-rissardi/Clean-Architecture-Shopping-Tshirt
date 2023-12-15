@@ -6,27 +6,27 @@ export class TshirtRepositoryInMemory extends Repository {
     }
     findById(id) {
         const tshirt = this.database.get(id);
+        if (!tshirt.active)
+            throw new Error("camisa inativada");
         return Promise.resolve(tshirt);
     }
     find() {
-        const tshirts = Array.from(this.database.values());
+        const tshirts = Array.from(this.database.values()).filter(tshirt => tshirt.active);
         return Promise.resolve(tshirts);
     }
-    async putOne(tshirt) {
-        try {
-            this.database.delete(tshirt.id);
+    async putOne(id, tshirt) {
+        if (this.database.has(id)) {
+            this.database.delete(id);
             this.database.set(tshirt.id, tshirt);
-            return true;
+            return;
         }
-        catch (error) {
-            return false;
-        }
+        throw new Error("camisa não existe");
     }
     async insertOne(tshirt) {
         this.database.set(tshirt.id, tshirt);
         return new Promise(resolve => resolve(tshirt));
     }
     putMany(tshirts) {
-        throw new Error("Method not implemented.");
+        return;
     }
 }

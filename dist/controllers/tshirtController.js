@@ -1,13 +1,14 @@
+import { AppError } from "../core/ErrosAplication/errosAplication.js";
 export class TshirtController {
     constructor(useCases) {
         this.useCases = useCases;
     }
-    async getAllTshirts(params, body) {
+    async getAllTshirts() {
         try {
-            const data = await this.useCases.getAllTshirt.execute();
+            const result = await this.useCases.getAllTshirt.execute();
             return {
                 message: "dados buscados com sucesso",
-                data,
+                result,
                 statusCode: "200"
             };
         }
@@ -21,11 +22,33 @@ export class TshirtController {
     async insertTshirt(params, body) {
         try {
             const { tshirt } = body;
-            const data = await this.useCases.createTshirt.execute(tshirt.size, tshirt.color, tshirt.price, tshirt.marca, tshirt.quantity, tshirt.type);
+            const result = await this.useCases.createTshirt.execute(tshirt.size, tshirt.color, tshirt.price, tshirt.marca, tshirt.quantity, tshirt.type);
+            if (result.isSuccess)
+                return {
+                    message: "dados inseridos com sucesso",
+                    data: result.getValue(),
+                    statusCode: 200
+                };
+            else
+                return {
+                    message: result.error,
+                    statusCode: 400
+                };
+        }
+        catch (error) {
             return {
-                message: "dados inseridos com sucesso",
-                data,
-                statusCode: "200"
+                message: AppError.UnexpectedError.errorMessage,
+                statusCode: 500
+            };
+        }
+    }
+    async updateTshirt(params, body) {
+        const { tshirt } = body;
+        try {
+            await this.useCases.putTshirt.execute(tshirt.id, tshirt);
+            return {
+                message: "camisa atualizada com sucesso!",
+                statusCode: 200
             };
         }
         catch (error) {

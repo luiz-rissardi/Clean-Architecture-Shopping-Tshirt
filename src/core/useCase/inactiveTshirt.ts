@@ -6,8 +6,12 @@ export class InactiveTshirt {
     constructor(private repository: Repository) {
     }
 
-    async execute(tshirt: Tshirt): Promise<boolean> {
-        tshirt.active = false;
-        return this.repository.putOne(tshirt);
+    async execute(id:number,tshirt: Tshirt): Promise<void> {
+        try {
+            tshirt.active = false;
+            this.repository.putOne(id,tshirt);
+        } catch (error) {
+            throw new Error("não foi possivel inativar camisa")
+        }
     }
 }

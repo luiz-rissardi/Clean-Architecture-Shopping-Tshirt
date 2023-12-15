@@ -1,7 +1,5 @@
-const INVALID_MESSAGES = {
-    COLOR_IS_FORBIDEN: `a cor da camise é de uma cor proibida`,
-    SIZE_IS_FORBIDEN: `o tamanho da camisa é proibido`
-};
+import { Result } from "../../infra/errorHandling/Result.js";
+import { AppError } from "../ErrosAplication/errosAplication.js";
 export class Tshirt {
     constructor(size, color, price, marca, quantity) {
         this.active = true;
@@ -11,24 +9,22 @@ export class Tshirt {
         this.size = size.toUpperCase();
         this.price = price;
         this.quantity = quantity;
-        this.validateTshirt();
     }
-    validateTshirt() {
-        const colorValidation = this.colorIsOk();
-        const sizeValidation = this.sizeIsOk();
-        if (!colorValidation.isValid || !sizeValidation.isValid) {
-            const messageError = `${colorValidation?.message || ""} and ${sizeValidation.message}`;
-            throw new Error(messageError);
-        }
+    static build(size, color, price, marca, quantity) {
+        if (!this.colorIsOk(color))
+            return Result.fail(AppError.ColorInvalidError.errorMessage);
+        if (!this.sizeIsOk(size))
+            return Result.fail(AppError.SizeInvalidError.errorMessage);
+        return Result.ok(new Tshirt(size, color, price, marca, quantity));
     }
-    colorIsOk() {
-        return ["black", "blue", "green", "white"].includes(this.color)
-            ? { isValid: true }
-            : { isValid: false, message: INVALID_MESSAGES.COLOR_IS_FORBIDEN };
+    static colorIsOk(color) {
+        return ["black", "blue", "green", "white"].includes(color)
+            ? true
+            : false;
     }
-    sizeIsOk() {
-        return ["M", "P", "G"].includes(this.size)
-            ? { isValid: true }
-            : { isValid: false, message: INVALID_MESSAGES.SIZE_IS_FORBIDEN };
+    static sizeIsOk(size) {
+        return ["M", "P", "G"].includes(size.toUpperCase())
+            ? true
+            : false;
     }
 }

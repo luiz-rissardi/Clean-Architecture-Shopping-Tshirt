@@ -9,22 +9,23 @@ export class TshirtRepositoryInMemory extends Repository {
 
     findById(id: number): Promise<Tshirt> {
         const tshirt = this.database.get(id);
+        if (!tshirt.active)
+            throw new Error("camisa inativada")
         return Promise.resolve(tshirt);
     }
 
     find(): Promise<Tshirt[]> {
-        const tshirts = Array.from(this.database.values());
+        const tshirts = Array.from(this.database.values()).filter(tshirt => tshirt.active)
         return Promise.resolve(tshirts);
     }
 
-    async putOne(tshirt: Tshirt): Promise<boolean> {
-        try {
-            this.database.delete(tshirt.id);
+    async putOne(id: number, tshirt: Tshirt): Promise<void> {
+        if (this.database.has(id)) {
+            this.database.delete(id);
             this.database.set(tshirt.id, tshirt);
-            return true;
-        } catch (error) {
-            return false;
+            return
         }
+        throw new Error("camisa não existe")
     }
 
     async insertOne(tshirt: Tshirt): Promise<Tshirt> {
@@ -32,8 +33,8 @@ export class TshirtRepositoryInMemory extends Repository {
         return new Promise(resolve => resolve(tshirt))
     }
 
-    putMany(tshirts: Tshirt[]): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    putMany(tshirts: Tshirt[]): Promise<void> {
+        return;
     }
 
 }

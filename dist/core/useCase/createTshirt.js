@@ -6,23 +6,19 @@ export class CreateTshirt {
         this.repository = repository;
     }
     async execute(size, color, price, marca, quantity, type = null) {
-        try {
-            let tshirt;
-            switch (type) {
-                case "withStamp":
-                    tshirt = new TshirtWithStamp(size, color, price, marca, quantity);
-                    break;
-                case "social":
-                    tshirt = new TshirtSocial(size, color, price, marca, quantity);
-                    break;
-                default:
-                    tshirt = new Tshirt(size, color, price, marca, quantity);
-                    break;
-            }
-            return await this.repository.insertOne(tshirt);
+        let result;
+        switch (type) {
+            case "stamp":
+                result = TshirtWithStamp.build(size, color, price, marca, quantity);
+                break;
+            case "social":
+                result = TshirtSocial.build(size, color, price, marca, quantity);
+                break;
+            default:
+                result = Tshirt.build(size, color, price, marca, quantity);
         }
-        catch (error) {
-            throw new Error(error.message);
-        }
+        if (result.isSuccess)
+            await this.repository.insertOne(result.getValue());
+        return result;
     }
 }
