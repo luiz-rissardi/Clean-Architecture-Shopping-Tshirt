@@ -9,7 +9,7 @@
     "t": "tsc ./src/app.ts",
     "startApi": "nodemon ./dist/infra/http/http.js",
     "startApiCluster": "nodemon ./dist/infra/cluster/cluster.js",
-    "autocannon": "npx autocannon -c 300 -d 10  --debug http://localhost:3000/api/tshirt",
+    "autocannon": "npx autocannon -c 3000 -d 10  --debug http://localhost:3000/api/tshirt",
     "start": "set CLIMEM=8999 && node -r climem ./dist/infra/http/http.js",
     "climem": "npx climem 8999"
   },

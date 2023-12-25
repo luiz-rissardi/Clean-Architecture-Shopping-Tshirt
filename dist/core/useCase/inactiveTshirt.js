@@ -1,14 +1,17 @@
+import { left, right } from "../Either/either.js";
+import { Result } from "../errorHandling/Result.js";
 export class InactiveTshirt {
     constructor(repository) {
         this.repository = repository;
     }
-    async execute(id, tshirt) {
-        try {
-            tshirt.active = false;
-            this.repository.putOne(id, tshirt);
+    async execute(tshirt) {
+        tshirt.active = false;
+        const result = await this.repository.putOne(tshirt.id, tshirt);
+        if (result.isRight()) {
+            return right(Result.ok(tshirt));
         }
-        catch (error) {
-            throw new Error("não foi possivel inativar camisa");
+        else {
+            return left(Result.fail(result.value.error));
         }
     }
 }

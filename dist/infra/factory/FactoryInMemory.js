@@ -1,3 +1,4 @@
+import { CommerceController } from "../../controllers/CommerceController.js";
 import { TshirtController } from "../../controllers/tshirtController.js";
 import { CreateTshirt } from "../../core/useCase/createTshirt.js";
 import { GetAllTshirts } from "../../core/useCase/getAllTshirt.js";
@@ -18,5 +19,19 @@ export class FactoryTshirtController {
             sellTshirts: new SellTshirt(repository)
         };
         return new TshirtController(useCases);
+    }
+}
+export class FactoryCommerceController {
+    static createInstance() {
+        const repository = new TshirtRepositoryInMemory(new Map());
+        const useCases = {
+            createTshirt: new CreateTshirt(repository),
+            getAllTshirt: new GetAllTshirts(repository),
+            getTshirt: new GetTshirt(repository),
+            putTshirt: new PutTshirt(repository),
+            inactiveTshirt: new InactiveTshirt(repository),
+            sellTshirts: new SellTshirt(repository)
+        };
+        return new CommerceController(useCases);
     }
 }

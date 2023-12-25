@@ -1,6 +1,6 @@
-import { Result } from "../../infra/errorHandling/Result.js";
-import { AppError } from "../ErrosAplication/errosAplication.js";
-
+import { Result } from "../errorHandling/Result.js";
+import { Either, left, right } from "../Either/either.js";
+import { DomainError } from "../ErrosAplication/errosAplication.js";
 
 export class Tshirt {
     size: string;
@@ -21,14 +21,20 @@ export class Tshirt {
         this.quantity = quantity;
     }
 
-    static build(size: string, color: string, price: number, marca: string, quantity: number) {
+    static build(size: string, color: string, price: number, marca: string, quantity: number)
+        : Either<
+            DomainError.ColorInvalidError |
+            DomainError.SizeInvalidError
+            ,
+            Result<Tshirt>
+        > {
         if (!this.colorIsOk(color))
-            return Result.fail<Tshirt>(AppError.ColorInvalidError.errorMessage);
+            return left(DomainError.ColorInvalidError.create())
 
         if (!this.sizeIsOk(size))
-            return Result.fail<Tshirt>(AppError.SizeInvalidError.errorMessage);
+            return left(DomainError.SizeInvalidError.create())
 
-        return Result.ok<Tshirt>(new Tshirt(size, color, price, marca, quantity));
+        return right(Result.ok<Tshirt>(new Tshirt(size, color, price, marca, quantity)));
     }
 
     private static colorIsOk(color: string) {

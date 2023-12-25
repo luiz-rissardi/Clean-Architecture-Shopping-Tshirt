@@ -1,17 +1,31 @@
 import { Tshirt } from "../../core/entity/Tshirt.js";
 import { Repository } from "./base/TshirtRepository.js";
+import { Either, right } from "../../core/Either/either.js";
+import { left } from "../../core/Either/either.js";
+import { Result } from "../../core/errorHandling/Result.js";
+import { DomainError } from "../../core/ErrosAplication/errosAplication.js";
 
 export class TshirtRepositoryInMemory extends Repository {
-
+    private static instance: TshirtRepositoryInMemory | null = null;
+    
     constructor(private database: Map<number, Tshirt>) {
         super();
+        if (TshirtRepositoryInMemory.instance === null) {
+            TshirtRepositoryInMemory.instance = this;
+        } else {
+            return TshirtRepositoryInMemory.instance;
+        }
     }
 
-    findById(id: number): Promise<Tshirt> {
-        const tshirt = this.database.get(id);
-        if (!tshirt.active)
-            throw new Error("camisa inativada")
-        return Promise.resolve(tshirt);
+    async findById(id: number): Promise<Either<DomainError.TshirtIsNotExist | DomainError.TshirtIsNotActive, Result<Tshirt>>> {
+        const tshirt = this.database.get(Number(id));
+        if (tshirt != null && tshirt !== undefined) {
+            if (tshirt.active) {
+                return right(Result.ok<Tshirt>(tshirt));
+            }
+            return left(DomainError.TshirtIsNotActive.create());
+        }
+        return left(DomainError.TshirtIsNotExist.create());
     }
 
     find(): Promise<Tshirt[]> {
@@ -19,13 +33,13 @@ export class TshirtRepositoryInMemory extends Repository {
         return Promise.resolve(tshirts);
     }
 
-    async putOne(id: number, tshirt: Tshirt): Promise<void> {
+    async putOne(id: number, tshirt: Tshirt): Promise<Either<DomainError.TshirtIsNotExist, Result<any>>> {
         if (this.database.has(id)) {
             this.database.delete(id);
-            this.database.set(tshirt.id, tshirt);
-            return
+            this.database.set(id, tshirt);
+            return right(Result.ok<Tshirt>(tshirt))
         }
-        throw new Error("camisa não existe")
+        return left(DomainError.TshirtIsNotExist.create())
     }
 
     async insertOne(tshirt: Tshirt): Promise<Tshirt> {
@@ -33,8 +47,8 @@ export class TshirtRepositoryInMemory extends Repository {
         return new Promise(resolve => resolve(tshirt))
     }
 
-    putMany(tshirts: Tshirt[]): Promise<void> {
-        return;
+    putMany(tshirts: Tshirt[]): void {
+        tshirts.forEach(tshirt => this.putOne(tshirt.id, tshirt))
     }
 
 }

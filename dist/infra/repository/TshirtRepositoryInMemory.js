@@ -1,14 +1,28 @@
 import { Repository } from "./base/TshirtRepository.js";
+import { right } from "../../core/Either/either.js";
+import { left } from "../../core/Either/either.js";
+import { Result } from "../../core/errorHandling/Result.js";
+import { DomainError } from "../../core/ErrosAplication/errosAplication.js";
 export class TshirtRepositoryInMemory extends Repository {
     constructor(database) {
         super();
         this.database = database;
+        if (TshirtRepositoryInMemory.instance === null) {
+            TshirtRepositoryInMemory.instance = this;
+        }
+        else {
+            return TshirtRepositoryInMemory.instance;
+        }
     }
-    findById(id) {
-        const tshirt = this.database.get(id);
-        if (!tshirt.active)
-            throw new Error("camisa inativada");
-        return Promise.resolve(tshirt);
+    async findById(id) {
+        const tshirt = this.database.get(Number(id));
+        if (tshirt != null && tshirt !== undefined) {
+            if (tshirt.active) {
+                return right(Result.ok(tshirt));
+            }
+            return left(DomainError.TshirtIsNotActive.create());
+        }
+        return left(DomainError.TshirtIsNotExist.create());
     }
     find() {
         const tshirts = Array.from(this.database.values()).filter(tshirt => tshirt.active);
@@ -17,16 +31,17 @@ export class TshirtRepositoryInMemory extends Repository {
     async putOne(id, tshirt) {
         if (this.database.has(id)) {
             this.database.delete(id);
-            this.database.set(tshirt.id, tshirt);
-            return;
+            this.database.set(id, tshirt);
+            return right(Result.ok(tshirt));
         }
-        throw new Error("camisa não existe");
+        return left(DomainError.TshirtIsNotExist.create());
     }
     async insertOne(tshirt) {
         this.database.set(tshirt.id, tshirt);
         return new Promise(resolve => resolve(tshirt));
     }
     putMany(tshirts) {
-        return;
+        tshirts.forEach(tshirt => this.putOne(tshirt.id, tshirt));
     }
 }
+TshirtRepositoryInMemory.instance = null;
