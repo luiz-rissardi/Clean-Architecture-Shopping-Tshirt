@@ -1,21 +1,25 @@
-import http from "http";
-import express from "express";
+
 import { Routes } from "../routes/routes.js";
 import { FactoryCommerceController, FactoryTshirtController } from "../factory/FactoryInMemory.js";
-import bodyParser from "body-parser";
 
-const app = express();
-const server = http.createServer(app);
 
-server.listen(3000,()=>{
-    console.log("server running in 3000");
-    initDependecies();
-});
+import Hapi from "@hapi/hapi";
 
-function initDependecies(){
+const server = Hapi.server({
+    port: 3000,
+    host: "localhost"
+})
+
+server.realm.modifiers.route.prefix = '/api';
+
+initDependecies();
+await server.start();
+console.log("server running in 3000");
+
+function initDependecies() {
     const tshirtController = FactoryTshirtController.createInstance();
     const commerceController = FactoryCommerceController.createInstance();
-    app.use(bodyParser.json())
-    app.use("/api",new Routes({tshirtController, commerceController}).getRoutes());
+    const routes = new Routes({ tshirtController, commerceController }).getRoutes();
+    server.route(routes);
 }
 

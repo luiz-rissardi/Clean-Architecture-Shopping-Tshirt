@@ -1,7 +1,7 @@
 import { Repository } from "./base/TshirtRepository.js";
 import { right } from "../../core/Either/either.js";
 import { left } from "../../core/Either/either.js";
-import { Result } from "../../core/errorHandling/Result.js";
+import { Result } from "../errorHandling/Result.js";
 import { DomainError } from "../../core/ErrosAplication/errosAplication.js";
 export class TshirtRepositoryInMemory extends Repository {
     constructor(database) {

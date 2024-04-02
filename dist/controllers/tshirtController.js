@@ -29,6 +29,7 @@ export class TshirtController extends BaseController {
     async insertTshirt(params, body) {
         try {
             const { tshirt } = body;
+            console.log(tshirt, body);
             const result = await this.useCases.createTshirt.execute(tshirt.size, tshirt.color, tshirt.price, tshirt.marca, tshirt.quantity, tshirt.type);
             if (result.isRight()) {
                 return this.ok("camiseta inserida com sucesso", result.value.getValue());

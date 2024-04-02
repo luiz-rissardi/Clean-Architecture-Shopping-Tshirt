@@ -1,4 +1,4 @@
-import { Result } from "../errorHandling/Result.js";
+import { Result } from "../../infra/errorHandling/Result.js";
 import { left, right } from "../Either/either.js";
 import { Tshirt } from "../entity/Tshirt.js";
 import { TshirtSocial } from "../entity/TshirtSocial.js";

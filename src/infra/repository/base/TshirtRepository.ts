@@ -1,7 +1,7 @@
 import { Either } from "../../../core/Either/either.js";
 import { DomainError } from "../../../core/ErrosAplication/errosAplication.js";
 import { Tshirt } from "../../../core/entity/Tshirt.js";
-import { Result } from "../../../core/errorHandling/Result.js";
+import { Result } from "../../errorHandling/Result.js";
 
 export abstract class Repository {
     abstract findById(id:number):Promise<Either<any,Result<Tshirt>>>;

@@ -2,7 +2,7 @@ import { Repository } from "../../infra/repository/base/TshirtRepository.js";
 import { Tshirt } from "../entity/Tshirt.js";
 import { Either, left, right } from "../Either/either.js";
 import { DomainError } from "../ErrosAplication/errosAplication.js";
-import { Result } from "../errorHandling/Result.js";
+import { Result } from "../../infra/errorHandling/Result.js";
 
 type Response = Either<
     DomainError.TshirtIsNotExist

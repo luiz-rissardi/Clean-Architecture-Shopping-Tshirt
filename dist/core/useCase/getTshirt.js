@@ -1,6 +1,6 @@
 import { left, right } from "../Either/either.js";
 import { DomainError } from "../ErrosAplication/errosAplication.js";
-import { Result } from "../errorHandling/Result.js";
+import { Result } from "../../infra/errorHandling/Result.js";
 export class GetTshirt {
     constructor(tshirtRepository) {
         this.tshirtRepository = tshirtRepository;

@@ -1,4 +1,4 @@
-import { Result } from "../errorHandling/Result.js";
+import { Result } from "../../infra/errorHandling/Result.js";
 export var AppError;
 (function (AppError) {
     class UnexpectedError extends Result {

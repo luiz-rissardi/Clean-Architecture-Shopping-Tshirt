@@ -1,8 +1,8 @@
 import { Repository } from "../../infra/repository/base/TshirtRepository.js";
 import { Either, left, right } from "../Either/either.js";
-import { AppError, DomainError } from "../ErrosAplication/errosAplication.js";
+import { DomainError } from "../ErrosAplication/errosAplication.js";
 import { Tshirt } from "../entity/Tshirt.js";
-import { Result } from "../errorHandling/Result.js";
+import { Result } from "../../infra/errorHandling/Result.js";
 
 
 

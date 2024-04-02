@@ -6,21 +6,23 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "t": "tsc ./src/app.ts",
-    "startApi": "nodemon ./dist/infra/http/http.js",
+    "t": "tsc ./src/infra/http/http.ts",
+    "start": "nodemon ./dist/infra/http/http.js",
     "startApiCluster": "nodemon ./dist/infra/cluster/cluster.js",
     "autocannon": "npx autocannon -c 3000 -d 10  --debug http://localhost:3000/api/tshirt",
-    "start": "set CLIMEM=8999 && node -r climem ./dist/infra/http/http.js",
+    "start-c": "set CLIMEM=8999 && node -r climem ./dist/infra/http/http.js",
     "climem": "npx climem 8999"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hapi/hapi": "^21.3.7",
     "autocannon": "^7.14.0",
     "body-parser": "^1.20.2",
     "climem": "^2.0.0",
     "express": "^4.18.2",
-    "nodemon": "^3.0.2"
+    "nodemon": "^3.0.2",
+    "typescript": "^5.4.3"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

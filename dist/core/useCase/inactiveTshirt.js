@@ -1,5 +1,5 @@
 import { left, right } from "../Either/either.js";
-import { Result } from "../errorHandling/Result.js";
+import { Result } from "../../infra/errorHandling/Result.js";
 export class InactiveTshirt {
     constructor(repository) {
         this.repository = repository;

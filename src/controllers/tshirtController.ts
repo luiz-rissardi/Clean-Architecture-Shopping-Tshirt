@@ -1,7 +1,7 @@
 import { Either } from "../core/Either/either.js";
 import { DomainError } from "../core/ErrosAplication/errosAplication.js";
 import { Tshirt } from "../core/entity/Tshirt.js";
-import { Result } from "../core/errorHandling/Result.js";
+import { Result } from "../infra/errorHandling/Result.js";
 import { UseCases } from "../core/useCase/usesCases.interface.js";
 import { BaseController } from "./base/baseController.js";
 
